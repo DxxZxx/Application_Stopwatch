@@ -10,11 +10,53 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 private int seconds=0;
 private boolean running;
+private boolean wasrunning;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(savedInstanceState != null){
+            seconds=savedInstanceState.getInt("seconds");
+            running=savedInstanceState.getBoolean("running");
+            wasrunning=savedInstanceState.getBoolean("wasrunning");
+        }
         runTimer();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("seconds", seconds);
+        savedInstanceState.putBoolean("running", running);
+        savedInstanceState.putBoolean("wasrunning", wasrunning);
+    }
+    /*
+    @Override
+    protected void onStop() {
+        super.onStop();
+        wasrunning=running;
+        running=false;
+    }
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        wasrunning=running;
+        running=false;
+    }
+    /*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(wasrunning) {
+            running = true;
+        }
+     */
+        @Override
+        protected void onResume() {
+            super.onResume();
+            if(wasrunning) {
+                running = true;
+            }
     }
     public void onClickStart(View view){
         running=true;
